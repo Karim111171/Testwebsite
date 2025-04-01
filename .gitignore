@@ -1,0 +1,22 @@
+# Node.js
+node_modules/
+
+# Environment variables
+.env
+
+# Log files
+*.log
+
+# Operating system files (macOS, Windows)
+.DS_Store
+Thumbs.db
+
+# IDE/editor files
+.vscode/
+.idea/
+
+# Build files
+dist/
+build/
+# Local Netlify folder
+.netlify
