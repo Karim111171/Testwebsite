@@ -1,0 +1,6 @@
+{
+  "name": "netlify-functions",
+  "dependencies": {
+    "stripe": "^17.7.0"
+  }
+}

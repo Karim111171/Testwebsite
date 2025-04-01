@@ -1,8 +1,7 @@
 [build]
-  command = "npm run build"
+  command = "npm run build && cd netlify/functions && npm install"
   publish = "build"
   functions = "netlify/functions"
-
 [dev]
   framework = "create-react-app"
   targetPort = 3000
