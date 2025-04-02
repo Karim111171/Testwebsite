@@ -35,7 +35,7 @@ module.exports.handler = async (event) => {
       line_items: [{
         price_data: {
           currency: 'eur',
-          product_data: { name: 'Premium Plan' },
+          product_data: { name: 'Amazing Product' },
           unit_amount: 599, // €5.99
           //recurring: { interval: 'month' },
         },
