@@ -1,7 +1,25 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 module.exports.handler = async (event) => {
-  // 1. Validate HTTP Method
+ // Set CORS headers (essential for production)
+ const headers = {
+	'Access-Control-Allow-Origin': event.headers.origin || '*',
+	'Access-Control-Allow-Headers': 'Content-Type',
+	'Access-Control-Allow-Methods': 'POST, OPTIONS',
+	'Content-Type': 'application/json'
+    };
+  
+    // Handle CORS preflight request
+    if (event.httpMethod === 'OPTIONS') {
+	return {
+	  statusCode: 200,
+	  headers,
+	  body: ''
+	};
+    }
+  
+	
+	// 1. Validate HTTP Method
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
