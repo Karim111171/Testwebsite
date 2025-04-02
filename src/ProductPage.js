@@ -3,6 +3,11 @@ import React from 'react';
 const ProductPage = () => {
   const handleCheckout = async () => {
     try {
+
+	// 2. Load Stripe only when needed
+      const { loadStripe } = await import('@stripe/stripe-js');
+      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+	
       // 1. Create Checkout Session
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
@@ -13,9 +18,7 @@ const ProductPage = () => {
 
       const { id: sessionId } = await response.json();
       
-      // 2. Load Stripe only when needed
-      const { loadStripe } = await import('@stripe/stripe-js');
-      const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+      
       
       // 3. Redirect to Checkout
       if (stripe && sessionId) {
@@ -30,7 +33,7 @@ const ProductPage = () => {
   return (
     <div className="product-page">
       <h1>Amazing Product</h1>
-      <p>$5.99</p>
+      <p>5.99 €</p>
       <button 
         onClick={handleCheckout}
         className="checkout-button"

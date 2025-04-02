@@ -16,9 +16,9 @@ module.exports.handler = async (event) => {
       payment_method_types: ['card'],
       line_items: [{
         price_data: {
-          currency: 'usd',
+          currency: 'eur',
           product_data: { name: 'Premium Plan' },
-          unit_amount: (599), // $5.99
+          unit_amount: 599, // €5.99
           //recurring: { interval: 'month' },
         },
         quantity: 1,
@@ -26,6 +26,7 @@ module.exports.handler = async (event) => {
       mode: 'payment',
       success_url: `${event.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${event.headers.origin}/cancel`,
+	locale: 'auto'
     });
 
     // 3. Return session ID
