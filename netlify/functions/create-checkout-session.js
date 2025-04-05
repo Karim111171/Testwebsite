@@ -12,10 +12,7 @@ module.exports.handler = async (event) => {
     // Handle CORS preflight request
     if (event.httpMethod === 'OPTIONS') {
 	return {
-	  statusCode: 200,
-	  headers,
-	  body: ''
-	};
+	  statusCode: 200, headers, body: ''};
     }
   
 	
