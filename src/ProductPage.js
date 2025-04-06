@@ -4,7 +4,7 @@ const products = [
     { id: 1, name: 'La nuit enchantée', price: 2, size: '50x70cm', weight: 800, image: '/images/cdk1.jpg' },
     { id: 2, name: 'La rosée du matin', price: 600, size: '50x70cm', weight: 900, image: '/images/cdk2.jpg' },
     { id: 3, name: 'Le coucher de soleil commence', price: 750, size: '50x70cm', weight: 1200, image: '/images/cdk3.jpg' },
-    { id: 4, name: 'La nuit enchantée', price: 600, size: '50x70cm', weight: 300, image: '/images/cdk1.jpg' },
+    { id: 4, name: 'La nuit enchanteuse', price: 600, size: '50x70cm', weight: 300, image: '/images/cdk1.jpg' },
 ];
 
 const ProductPage = () => {
