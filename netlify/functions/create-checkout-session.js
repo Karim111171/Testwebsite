@@ -27,7 +27,7 @@ module.exports.handler = async (event) => {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      lline_items: [
+      line_items: [
 		...items.map((item) => ({
 		    price_data: {
 			  currency: 'eur',
