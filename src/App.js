@@ -13,7 +13,7 @@ const App = () => {
           <nav>
 	    <h1>Carla Dib Keirouz</h1>
             <ul>
-              <li><Link to="/about">About</Link></li>
+              <li><Link to="/about">Home</Link></li>
               <li><Link to="/products">Paintings</Link></li>
               <li><Link to="/contact">Contact me</Link></li>
             </ul>

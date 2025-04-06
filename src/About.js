@@ -3,7 +3,7 @@ import React from 'react';
 const About = () => {
   return (
     <div style={{ padding: '20px', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>About Me</h1>
+      <h1>Carla Dib Keirouz</h1>
 	<img src="/images/cdk.jpg" alt="Carla Dib Keirouz" className="about-img"/>
       <p>
         Je suis partie pour Paris en Octobre 2020, laissant derrière moi un souvenir douloureux de l'explosion de Beyrouth, déterminée à commencer une nouvelle vie. Face aux conséquences d'un événement aussi violent, il y a une irrésistible envie de vivre pleinement, de poursuivre ce qui apporte de la joie à nos âmes. «Nous avons survécu, alors maintenant, nous devons vivre…»

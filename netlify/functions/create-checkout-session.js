@@ -1,4 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+const nodemailer = require('nodemailer'); // For sending emails
 
 module.exports.handler = async (event) => {
   const headers = {
@@ -19,10 +20,10 @@ module.exports.handler = async (event) => {
   }
 
   try {
-    const { items } = JSON.parse(event.body); // Expect an array of items from the frontend
+    const { items, deliveryDetails } = JSON.parse(event.body); // Expect items and delivery details from the frontend
 
     // Add a fixed delivery fee
-    const deliveryFee = 500; // Fixed delivery fee in cents (€5.00)
+    const deliveryFee = 300; // Fixed delivery fee in cents (€15.00)
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -50,9 +51,50 @@ module.exports.handler = async (event) => {
       locale: 'auto',
     });
 
+    // Send order details via email
+    await sendOrderDetailsToEmail(items, deliveryDetails);
+
     return { statusCode: 200, body: JSON.stringify({ id: session.id }), headers };
   } catch (error) {
     console.error('Stripe error:', error);
     return { statusCode: error.statusCode || 500, body: JSON.stringify({ error: error.message }), headers };
   }
 };
+
+// Function to send order details via email
+async function sendOrderDetailsToEmail(items, deliveryDetails) {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail', // Replace with your email service
+    auth: {
+      user: process.env.EMAIL_USER, // Your email address
+      pass: process.env.EMAIL_PASS, // Your email password
+    },
+  });
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: process.env.NOTIFICATION_EMAIL, // Your email to receive notifications
+    subject: 'New Order Received',
+    text: `
+        New Order Details:
+        -------------------
+        Items:
+        ${items
+            .map(
+                (item) =>
+                    `- ${item.name} (Quantity: ${item.quantity}, Price: ${item.price.toFixed(2)} €)`
+            )
+            .join('\n')}
+
+        Delivery Details:
+        - Name: ${deliveryDetails.name}
+        - Address: ${deliveryDetails.address}
+        - Postal Code: ${deliveryDetails.postalCode}
+        - City: ${deliveryDetails.city}
+        - Email: ${deliveryDetails.email}
+        - Phone: ${deliveryDetails.phone}
+    `,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
