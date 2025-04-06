@@ -95,33 +95,40 @@ const ProductPage = () => {
 	    return cartTotal + deliveryFee;
 	};
   
-	// Function to handle checkout
 	const handleCheckout = async () => {
-	    try {
-		  const { loadStripe } = await import('@stripe/stripe-js');
-		  const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-  
-		  if (!stripe) throw new Error('Stripe failed to initialize');
-  
-		  const response = await fetch('/.netlify/functions/create-checkout-session', {
-			method: 'POST',
-			headers: { 'Content-Type': 'application/json' },
-			body: JSON.stringify({ items: cart }),
-		  });
-  
-		  if (!response.ok) {
-			const errorData = await response.json();
-			throw new Error(errorData.error || 'Payment failed');
-		  }
-  
-		  const { id: sessionId } = await response.json();
-		  const { error } = await stripe.redirectToCheckout({ sessionId });
-		  if (error) throw error;
-	    } catch (error) {
-		  console.error('Checkout error:', error);
-		  alert(`Payment failed: ${error.message}`);
-	    }
-	};
+		try {
+		    // Validate cart items
+		    const invalidItems = cart.filter((item) => !item.name || typeof item.price !== 'number' || !item.quantity);
+		    if (invalidItems.length > 0) {
+			  console.error('Invalid cart items:', invalidItems);
+			  alert('Some items in your cart are invalid. Please check your cart.');
+			  return;
+		    }
+	  
+		    const { loadStripe } = await import('@stripe/stripe-js');
+		    const stripe = await loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+	  
+		    if (!stripe) throw new Error('Stripe failed to initialize');
+	  
+		    const response = await fetch('/.netlify/functions/create-checkout-session', {
+			  method: 'POST',
+			  headers: { 'Content-Type': 'application/json' },
+			  body: JSON.stringify({ items: cart, deliveryDetails }),
+		    });
+	  
+		    if (!response.ok) {
+			  const errorData = await response.json();
+			  throw new Error(errorData.error || 'Payment failed');
+		    }
+	  
+		    const { id: sessionId } = await response.json();
+		    const { error } = await stripe.redirectToCheckout({ sessionId });
+		    if (error) throw error;
+		} catch (error) {
+		    console.error('Checkout error:', error);
+		    alert(`Payment failed: ${error.message}`);
+		}
+	  };
   
 	return (
 	    <div className="product-page">

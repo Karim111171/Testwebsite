@@ -27,24 +27,24 @@ module.exports.handler = async (event) => {
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        ...items.map((item) => ({
-          price_data: {
-            currency: 'eur',
-            product_data: { name: item.name },
-            unit_amount: item.price * 100, // Convert price to cents
-          },
-          quantity: item.quantity,
-        })),
-        {
-          price_data: {
-            currency: 'eur',
-            product_data: { name: 'Delivery Fee' },
-            unit_amount: deliveryFee,
-          },
-          quantity: 1,
-        },
-      ],
+      lline_items: [
+		...items.map((item) => ({
+		    price_data: {
+			  currency: 'eur',
+			  product_data: { name: item.name || 'Unnamed Product' }, // Fallback for missing name
+			  unit_amount: (typeof item.price === 'number' ? item.price : 0) * 100, // Fallback for missing/invalid price
+		    },
+		    quantity: item.quantity || 1, // Fallback for missing quantity
+		})),
+		{
+		    price_data: {
+			  currency: 'eur',
+			  product_data: { name: 'Delivery Fee' },
+			  unit_amount: deliveryFee,
+		    },
+		    quantity: 1,
+		},
+	  ],
       mode: 'payment',
       success_url: `${event.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${event.headers.origin}/cancel`,
