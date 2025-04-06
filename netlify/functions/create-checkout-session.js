@@ -52,7 +52,7 @@ module.exports.handler = async (event) => {
     });
 
     // Send order details via email
-    await sendOrderDetailsToEmail(items, deliveryDetails);
+    /*await sendOrderDetailsToEmail(items, deliveryDetails);*/
 
     return { statusCode: 200, body: JSON.stringify({ id: session.id }), headers };
   } catch (error) {
