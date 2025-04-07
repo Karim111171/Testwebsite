@@ -21,7 +21,7 @@ module.exports.handler = async (event) => {
 
   try {
     const { items, deliveryDetails } = JSON.parse(event.body);
-    const deliveryFee = 300; // €3.00 in cents
+const deliveryFee = 1500; // €3.00 in cents
 
     // 1. Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
