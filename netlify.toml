@@ -6,3 +6,8 @@
 [dev]
   framework = "create-react-app"
   targetPort = 3000
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

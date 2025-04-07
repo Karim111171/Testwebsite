@@ -23,13 +23,15 @@ const App = () => {
 
         {/* Main Content */}
         <main>
-          <Routes>
-            <Route path="/about" element={<About />} />
-            <Route path="/products" element={<ProductPage />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/" element={<About />} /> {/* Default route */}
+	  <Routes>
+		<Route path="/about" element={<About />} />
+		<Route path="/products" element={<ProductPage />} />
+		<Route path="/contact" element={<Contact />} />
 		<Route path="/success" element={<SuccessPage />} />
-          </Routes>
+		<Route path="/" element={<About />} />
+		{/* Add a catch-all route for SPA behavior */}
+		<Route path="*" element={<Navigate to="/" />} />
+	  </Routes>
         </main>
 
         {/* Footer */}
