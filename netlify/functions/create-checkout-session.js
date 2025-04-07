@@ -59,6 +59,7 @@ module.exports.handler = async (event) => {
         sendOrderEmail(items, deliveryDetails),
         new Promise((_, reject) => 
           setTimeout(() => reject(new Error('Email timed out after 9s')), 9000)
+	),
       ]);
       
       console.log(`Email sent successfully in ${Date.now() - emailStartTime}ms`);
