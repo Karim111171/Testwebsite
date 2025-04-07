@@ -187,13 +187,29 @@
 	  border-left: none; /* Removes left border for mobile */
 	  border-top: 1px solid #ddd; /* Adds top border instead */
 	}
+
+	.product-card {
+		width: 100%; /* Make product cards full-width on mobile */
+		max-width: 100%; /* Ensure they don't exceed the container width */
+		padding: 0.75rem;
+	  }
+	
+	.product-image {
+		height: 150px; /* Set a fixed height for images to prevent overflow */
+		object-fit: cover;
+	  }
     
+    
+	  .product-list {
+		grid-template-columns: 1fr; /* Single column layout for mobile */
+	  }
+
 	h1 {
-	  font-size: 2rem;
+	  font-size: 1rem;
 	}
     
 	p {
-	  font-size: 1.2rem;
+	  font-size: 1rem;
 	}
     
 	button {

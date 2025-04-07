@@ -138,7 +138,7 @@ async function sendOrderEmail(items, deliveryDetails) {
             <tr>
               <td>${item.name}</td>
               <td>${item.quantity}</td>
-              <td>${(item.price/100).toFixed(2)} €</td>
+              <td>${(item.price).toFixed(2)} €</td>
             </tr>
           `).join('')}
         </tbody>
