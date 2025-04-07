@@ -48,7 +48,7 @@ module.exports.handler = async (event) => {
     });
 
     // Fire and forget the email
-    sendOrderDetailsToEmail(items, deliveryDetails)
+    sendOrderEmail(items, deliveryDetails)
       .catch(e => console.error("Email failed:", e));
 
     return { statusCode: 200, body: JSON.stringify({ id: session.id }), headers };
@@ -58,43 +58,52 @@ module.exports.handler = async (event) => {
   }
 };
 
-async function sendOrderDetailsToEmail(items, deliveryDetails) {
-  try {
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-    });
-
-    const mailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.NOTIFICATION_EMAIL,
-      subject: 'New Order Received',
-      text: `
-        New Order Details:
-        -------------------
-        Items:
-        ${items.map(item => 
-          `- ${item.name} (Quantity: ${item.quantity}, Price: ${(item.price/100).toFixed(2)} €)`
-        ).join('\n')}
-
-        Delivery Details:
-        - Name: ${deliveryDetails.name}
-        - Address: ${deliveryDetails.address}
-        - Postal Code: ${deliveryDetails.postalCode}
-        - City: ${deliveryDetails.city}
-        - Email: ${deliveryDetails.email}
-        - Phone: ${deliveryDetails.phone}
-      `,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-    console.log('Email sent:', info.messageId);
-    return info;
-  } catch (error) {
-    console.error('Email failed:', error);
-    throw error;
-  }
-}
+async function sendOrderEmail(items, deliveryDetails) {
+	try {
+	  console.log('Attempting to send email...');
+	  
+	  const transporter = nodemailer.createTransport({
+	    service: 'gmail',
+	    auth: {
+		user: process.env.EMAIL_USER,
+		pass: process.env.EMAIL_PASS,
+	    },
+	    /*tls: {
+		rejectUnauthorized: false // Only for testing, remove in production
+	    }*/
+	  });
+    
+	  const mailOptions = {
+	    from: `"Store Notifications" <${process.env.EMAIL_USER}>`,
+	    to: process.env.NOTIFICATION_EMAIL,
+	    subject: 'New Order Received',
+	    html: `
+		<h2>New Order Details</h2>
+		<h3>Items:</h3>
+		<ul>
+		  ${items.map(item => `
+		    <li>
+			${item.name} (Quantity: ${item.quantity}, Price: ${(item.price/100).toFixed(2)} €)
+		    </li>
+		  `).join('')}
+		</ul>
+		<h3>Delivery Details:</h3>
+		<ul>
+		  <li>Name: ${deliveryDetails.name}</li>
+		  <li>Address: ${deliveryDetails.address}</li>
+		  <li>Postal Code: ${deliveryDetails.postalCode}</li>
+		  <li>City: ${deliveryDetails.city}</li>
+		  <li>Email: ${deliveryDetails.email}</li>
+		  <li>Phone: ${deliveryDetails.phone}</li>
+		</ul>
+	    `
+	  };
+    
+	  const info = await transporter.sendMail(mailOptions);
+	  console.log('Email sent:', info.messageId);
+	  return info;
+	} catch (error) {
+	  console.error('Email error:', error);
+	  throw error;
+	}
+    }
