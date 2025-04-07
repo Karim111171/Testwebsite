@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import About from './About';
 import ProductPage from './ProductPage';
 import Contact from './Contact';
+import SuccessPage from './SuccessPage';
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/products" element={<ProductPage />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/" element={<About />} /> {/* Default route */}
+		<Route path="/success" element={<SuccessPage />} />
           </Routes>
         </main>
 
@@ -39,17 +41,6 @@ const App = () => {
   );
 };
 
-const SuccessPage = () => {
-	const location = window.location.search;
-	const sessionId = new URLSearchParams(location).get('session_id');
-    
-	return (
-	  <div style={{ textAlign: 'center', marginTop: '50px' }}>
-	    <h1 style={{ color: 'green' }}>Payment Successful!</h1>
-	    <p>Your payment was processed successfully.</p>
-	    {sessionId && <p style={{ fontSize: '0.9rem', color: '#555' }}>Session ID: {sessionId}</p>}
-	  </div>
-	);
-    };
+
 
 export default App;
