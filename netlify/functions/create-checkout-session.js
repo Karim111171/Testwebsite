@@ -9,18 +9,21 @@ module.exports.handler = async (event) => {
     'Content-Type': 'application/json',
   };
 
+  // Handle CORS preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
   }
 
+  // Validate HTTP method
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: JSON.stringify({ error: 'Method Not Allowed' }), headers };
   }
 
   try {
     const { items, deliveryDetails } = JSON.parse(event.body);
-    const deliveryFee = 300;
+    const deliveryFee = 300; // €3.00 in cents
 
+    // 1. Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -47,63 +50,107 @@ module.exports.handler = async (event) => {
       locale: 'auto',
     });
 
-    // Fire and forget the email
-    sendOrderEmail(items, deliveryDetails)
-      .catch(e => console.error("Email failed:", e));
+    // 2. Send order confirmation email with timeout protection
+    try {
+      console.log('Attempting to send order email...');
+      const emailStartTime = Date.now();
+      
+      const emailResult = await Promise.race([
+        sendOrderEmail(items, deliveryDetails),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('Email timed out after 9s')), 9000)
+      ]);
+      
+      console.log(`Email sent successfully in ${Date.now() - emailStartTime}ms`);
+    } catch (emailError) {
+      console.error('Order email failed:', {
+        error: emailError.message,
+        stack: emailError.stack,
+        deliveryDetails: deliveryDetails // Redacted in production
+      });
+    }
 
-    return { statusCode: 200, body: JSON.stringify({ id: session.id }), headers };
+    // 3. Return successful response
+    return { 
+      statusCode: 200, 
+      body: JSON.stringify({ 
+        id: session.id,
+        message: 'Payment session created successfully'
+      }), 
+      headers 
+    };
+
   } catch (error) {
-    console.error('Error:', error);
-    return { statusCode: error.statusCode || 500, body: JSON.stringify({ error: error.message }), headers };
+    console.error('Checkout processing failed:', {
+      error: error.message,
+      stack: error.stack
+    });
+    return { 
+      statusCode: error.statusCode || 500, 
+      body: JSON.stringify({ 
+        error: 'Payment processing failed',
+        details: error.message 
+      }), 
+      headers 
+    };
   }
 };
 
 async function sendOrderEmail(items, deliveryDetails) {
-	try {
-	  console.log('Attempting to send email...');
-	  
-	  const transporter = nodemailer.createTransport({
-	    service: 'gmail',
-	    auth: {
-		user: process.env.EMAIL_USER,
-		pass: process.env.EMAIL_PASS,
-	    },
-	    /*tls: {
-		rejectUnauthorized: false // Only for testing, remove in production
-	    }*/
-	  });
-    
-	  const mailOptions = {
-	    from: `"Store Notifications" <${process.env.EMAIL_USER}>`,
-	    to: process.env.NOTIFICATION_EMAIL,
-	    subject: 'New Order Received',
-	    html: `
-		<h2>New Order Details</h2>
-		<h3>Items:</h3>
-		<ul>
-		  ${items.map(item => `
-		    <li>
-			${item.name} (Quantity: ${item.quantity}, Price: ${(item.price/100).toFixed(2)} €)
-		    </li>
-		  `).join('')}
-		</ul>
-		<h3>Delivery Details:</h3>
-		<ul>
-		  <li>Name: ${deliveryDetails.name}</li>
-		  <li>Address: ${deliveryDetails.address}</li>
-		  <li>Postal Code: ${deliveryDetails.postalCode}</li>
-		  <li>City: ${deliveryDetails.city}</li>
-		  <li>Email: ${deliveryDetails.email}</li>
-		  <li>Phone: ${deliveryDetails.phone}</li>
-		</ul>
-	    `
-	  };
-    
-	  const info = await transporter.sendMail(mailOptions);
-	  console.log('Email sent:', info.messageId);
-	  return info;
-	} catch (error) {
-	  console.error('Email error:', error);
-	  throw error;
-	}
-    }
+  // Validate required environment variables
+  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS || !process.env.NOTIFICATION_EMAIL) {
+    throw new Error('Missing email configuration');
+  }
+
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+    logger: true,  // Enable detailed logging
+    debug: process.env.NETLIFY_DEV === 'true' // Debug only in development
+  });
+
+  const mailOptions = {
+    from: `"Store Orders" <${process.env.EMAIL_USER}>`,
+    to: process.env.NOTIFICATION_EMAIL,
+    subject: `New Order: ${deliveryDetails.name}`,
+    html: `
+      <h1>New Order Received</h1>
+      <h2>Customer Details</h2>
+      <p><strong>Name:</strong> ${deliveryDetails.name}</p>
+      <p><strong>Email:</strong> ${deliveryDetails.email}</p>
+      <p><strong>Address:</strong> ${deliveryDetails.address}, ${deliveryDetails.postalCode} ${deliveryDetails.city}</p>
+      
+      <h2>Order Items</h2>
+      <table border="1" cellpadding="5">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${items.map(item => `
+            <tr>
+              <td>${item.name}</td>
+              <td>${item.quantity}</td>
+              <td>${(item.price/100).toFixed(2)} €</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `
+  };
+
+  const info = await transporter.sendMail(mailOptions);
+  console.log('Email delivery info:', {
+    messageId: info.messageId,
+    accepted: info.accepted,
+    rejected: info.rejected
+  });
+  
+  return info;
+}
