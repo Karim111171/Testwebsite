@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const SuccessPage = () => {
-	const location = window.location.search;
-	const sessionId = new URLSearchParams(location).get('session_id');
-    
-	return (
-	  <div style={{ textAlign: 'center', marginTop: '50px' }}>
-	    <h1 style={{ color: 'green' }}>Payment Successful!</h1>
-	    <p>Your payment was processed successfully.</p>
-	    {sessionId && <p style={{ fontSize: '0.9rem', color: '#555' }}>Session ID: {sessionId}</p>}
-	  </div>
-	);
-    };
+  const [searchParams] = useSearchParams();
 
-    export default SuccessPage
+  useEffect(() => {
+    const sessionId = searchParams.get('session_id');
+    const savedCart = localStorage.getItem('checkoutData');
+
+    if (sessionId && savedCart) {
+      const { items, deliveryDetails } = JSON.parse(savedCart);
+      
+      fetch('/.netlify/functions/create-checkout-session/sendOrderEmail', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items, deliveryDetails })
+      })
+      .then(() => {
+        localStorage.removeItem('cart');
+        localStorage.removeItem('checkoutData');
+      })
+      .catch(console.error);
+    }
+  }, []);
+
+  return (
+    <div style={{ textAlign: 'center', padding: '2rem' }}>
+      <h1 style={{ color: 'green' }}>Payment Successful!</h1>
+      <p>Your order confirmation will be emailed shortly.</p>
+    </div>
+  );
+};
+
+export default SuccessPage;

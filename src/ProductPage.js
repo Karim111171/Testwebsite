@@ -122,6 +122,10 @@ const ProductPage = () => {
 		    }
 	  
 		    const { id: sessionId } = await response.json();
+		    localStorage.setItem('checkoutData', JSON.stringify({
+			items: cart,
+			deliveryDetails
+		    }));
 		    const { error } = await stripe.redirectToCheckout({ sessionId });
 		    if (error) throw error;
 		} catch (error) {
