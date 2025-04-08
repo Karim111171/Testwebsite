@@ -9,17 +9,12 @@ const SuccessPage = () => {
     const savedCart = localStorage.getItem('checkoutData');
 
     if (sessionId && savedCart) {
-      const { items, deliveryDetails } = JSON.parse(savedCart);
-      
-      fetch('/.netlify/functions/create-checkout-session/sendOrderEmail', {
+      fetch('/.netlify/functions/send-order-confirmation', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ items, deliveryDetails })
+        body: savedCart
       })
-      .then(() => {
-        localStorage.removeItem('cart');
-        localStorage.removeItem('checkoutData');
-      })
+      .then(() => localStorage.removeItem('checkoutData'))
       .catch(console.error);
     }
   }, []);
