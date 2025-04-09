@@ -12,8 +12,8 @@ module.exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') return { statusCode: 405, headers, body: 'Method Not Allowed' };
 
   try {
-    const { items, deliveryDetails } = JSON.parse(event.body);
-    const deliveryFee = 300; // €15 in cents
+    const { items, deliveryDetails, deliveryFee } = JSON.parse(event.body);
+    //const deliveryFee = 300; // €15 in cents
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -30,7 +30,7 @@ module.exports.handler = async (event) => {
           price_data: {
             currency: 'eur',
             product_data: { name: 'Delivery Fee' },
-            unit_amount: deliveryFee,
+            unit_amount: typeof deliveryFee === 'number' ? deliveryFee * 100 : 0,
           },
           quantity: 1,
         }

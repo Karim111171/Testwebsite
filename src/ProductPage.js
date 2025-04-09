@@ -74,7 +74,7 @@ const ProductPage = () => {
   
 	    // Delivery fees for France
 	    if (totalWeight < 1000) {
-		  return 3; // Base fee for < 1 kg
+		  return 15; // Base fee for < 1 kg
 	    } else if (totalWeight >= 1000 && totalWeight <= 3000) {
 		  return 15 + 15; // Base fee + 15 € for 1-3 kg
 	    } else {
