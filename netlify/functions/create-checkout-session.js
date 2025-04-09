@@ -13,7 +13,7 @@ module.exports.handler = async (event) => {
 
   try {
     const { items, deliveryDetails } = JSON.parse(event.body);
-    const deliveryFee = 1500; // €15 in cents
+    const deliveryFee = 300; // €15 in cents
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
