@@ -14,6 +14,13 @@ const App = () => {
           <nav>
 	    <h1>Carla Dib Keirouz</h1>
             <ul>
+		  <li><a 
+          href="https://karim111171.github.io/Carla-Dib-Keirouz/"  // remplace par l’URL finale de ton portfolio
+          target="_blank" 
+          rel="noopener noreferrer"
+        >
+          About
+        </a></li>
               <li><Link to="/about">Home</Link></li>
               <li><Link to="/products">Collect</Link></li>
               <li><Link to="/contact">Contact me</Link></li>
