@@ -23,7 +23,7 @@ const App = () => {
                 </li>
                 <li>
                   <a
-                    href="https://ton-portfolio.com" // Remplace par l'URL de ton portfolio
+                    href="https://karim111171.github.io/Carla-Dib-Keirouz/" // Remplace par l'URL de ton portfolio
                     target="_blank"
                     rel="noopener noreferrer"
                   >
