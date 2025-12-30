@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-ro
 import About from './About';
 import ProductPage from './ProductPage';
 import Contact from './Contact';
-import SuccessPage from './SuccessPage';
+import SuccessPage from './SuccessPage';	
 
 const App = () => {
   return (
@@ -15,7 +15,7 @@ const App = () => {
 	    <h1>Carla Dib Keirouz</h1>
             <ul>
               <li><Link to="/about">Home</Link></li>
-              <li><Link to="/products">Paintings</Link></li>
+              <li><Link to="/products">Collect</Link></li>
               <li><Link to="/contact">Contact me</Link></li>
             </ul>
           </nav>
