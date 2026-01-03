@@ -34,12 +34,12 @@ header .container {
 }
 
 header h1 {
-    font-family: 'Arial', serif;
+    font-family: 'Libre Baskerville', Georgia, serif;
     font-size: 0.85rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     font-weight: 400;
-    color: #2b2b2b;
+    color: #2c2c2c;
     margin: 0;
     line-height: 1.2;
 }
@@ -53,7 +53,14 @@ nav ul {
     padding: 0;
     text-align: center;
 }
-
+nav ul li a {
+    background: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #666;
+    padding: 6px 0;
+}
 nav ul li a, nav ul li a:visited {
     display: block;
     text-decoration: none;
@@ -68,6 +75,7 @@ nav ul li a, nav ul li a:visited {
 nav ul li a:hover {
     color: #ebdcd5;
     background: rgba(0,0,0,0.1);
+    opacity: 0.6;
 }
 
 /* Desktop layout */
@@ -144,28 +152,28 @@ nav ul li a:hover {
     }
     
     .product-card {
-	border: 1px solid #ddd;
-	padding: 4px;
+	border: none;
+	padding: 0;
 	border-radius: 4px;
-	width: 32%;
+	width: 30%;
 	text-align: center;
-	margin-bottom: 1rem;
+	margin-bottom: 3rem;
     }
     
     .product-image {
-	width: 90%;
-	height: 70%;
+	width: 100%;
+	height: auto;
 	object-fit: contain;
-	border-radius: 2px;
+	border-radius: 0;
     }
     
 
 /* Cart Sidebar */
 .cart-sidebar {
 	flex: 1; /* Takes up 1/4 of the available space */
-	background-color: #f9fafb;
-	padding: 1rem;
-	border-left: 1px solid #ddd;
+	background: #f6f3ef;
+	padding: 2rem;
+	border-left: none;
 	display: flex; /* Use flexbox for alignment */
 	flex-direction: column; /* Stack cart items vertically */
 	align-items: stretch; /* Ensure full width for cart items */
@@ -231,19 +239,20 @@ nav ul li a:hover {
     
     /* Buttons */
     button {
-	background-color: #48bb78;
-	color: white;
-	border: none;
-	padding: 12px 24px;
-	font-size: 1rem;
-	border-radius: 8px;
-	cursor: pointer;
-	transition: background-color 0.3s ease;
-    }
+    background: transparent;
+    border: 1px solid #111;
+    color: #111;
+    font-family: inherit;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.8rem;
+}
     
     button:hover {
-	background-color: #38a169;
-    }
+    background: #111;
+    color: #fff;
+}
     
     button:active {
 	transform: scale(0.98);

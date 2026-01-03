@@ -19,9 +19,6 @@ const App = () => {
                   <Link to="/products">Paintings</Link>
                 </li>
                 <li>
-                  <Link to="/success">Checkout</Link>
-                </li>
-                <li>
                   <a
                     href="https://karim111171.github.io/Carla-Dib-Keirouz/" // Remplace par l'URL de ton portfolio
                     target="_blank"
