@@ -35,11 +35,11 @@ const App = () => {
         {/* Main Content */}
         <main>
 	  <Routes>
-		<Route path="/about" element={<About />} />
 		<Route path="/products" element={<ProductPage />} />
+		<Route path="/about" element={<About />} />
 		<Route path="/contact" element={<Contact />} />
 		<Route path="/success" element={<SuccessPage />} />
-		<Route path="/" element={<About />} />
+		<Route path="/" element={<Navigate to="/products" replace />} />
 		{/* Add a catch-all route for SPA behavior */}
 		<Route path="*" element={<Navigate to="/" />} />
 	  </Routes>

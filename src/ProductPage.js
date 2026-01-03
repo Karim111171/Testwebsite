@@ -144,14 +144,21 @@ const ProductPage = () => {
 			<h1>Paintings</h1>
 			<div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
 			    {products.map((product) => (
-				  <div key={product.id} className="product-card">
-					<img src={product.image} alt={product.name} className="product-image" />
-					<h2>{product.name}</h2>
-					<p>Size: {product.size}</p>
-					<p>{product.price.toFixed(2)} €</p>
-					<button onClick={() => addToCart(product)}>Add to Cart</button>
-				  </div>
-			    ))}
+				<div key={product.id} className="product-card">
+				<div className="product-image-wrapper">
+					<img
+					src={product.image}
+					alt={product.name}
+					className="product-image"/>
+				</div>
+				<div className="product-info">
+					<h2 className="product-title">{product.name}</h2>
+					<p className="product-size">{product.size}</p>
+					<p className="product-price">{product.price.toFixed(2)} €</p>
+				</div>
+				<button onClick={() => addToCart(product)}>Add to Cart</button>
+				</div>
+				))}
 			</div>
 		  </div>
   
