@@ -174,8 +174,7 @@ const ProductPage = () => {
 					    <span>{item.name}</span>
 					    <img
 					src={product.image}
-					alt={product.name}
-					className="product-image"/>
+					alt={product.name}/>
 					    <span>{item.image}</span>
 					    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 						  <button
