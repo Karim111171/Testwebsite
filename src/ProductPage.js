@@ -172,10 +172,6 @@ const ProductPage = () => {
 				  {cart.map((item) => (
 					<div key={item.id} className="cart-item">
 					    <span>{item.name}</span>
-					    <img
-					src={product.image}
-					alt={product.name}/>
-					    <span>{item.image}</span>
 					    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 						  <button
 							onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1))}
