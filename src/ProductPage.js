@@ -1,13 +1,12 @@
 import React from 'react';
 
 const products = [
-    { id: 1, name: 'La nuit enchantée', price: 600, size: '50x70cm', weight: 800, image: '/images/cdk1.jpg' },
-    { id: 2, name: 'La rosée du matin', price: 600, size: '50x70cm', weight: 900, image: '/images/cdk2.jpg' },
-    { id: 3, name: 'Le coucher de soleil commence', price: 750, size: '50x70cm', weight: 1200, image: '/images/cdk3.jpg' },
-    { id: 4, name: 'La nuit enchanteuse', price: 600, size: '50x70cm', weight: 300, image: '/images/cdk4.jpg' },
-    { id: 5, name: 'La boite noire', price: 300, size: '30x40cm', weight: 200, image: '/images/cdk5.jpg' },
-    { id: 6, name: 'Plouf !', price: 20, size: '5x7cm', weight: 50, image: '/images/cdk6.jpg' },
-    { id: 7, name: 'Tic Tac Boum', price: 350, size: '40x60cm', weight: 300, image: '/images/cdk7.jpg' },
+    { id: 1, name: 'Music from another room', price: 2600, size: '100x70cm', weight: 800, image: '/images/Music from another room.jpeg' },
+    { id: 2, name: 'Being Human', price: 2600, size: '100x70cm', weight: 900, image: '/images/Being Human.jpeg' },
+    { id: 3, name: 'Between the bombs & the stars', price: 2750, size: '70x100cm', weight: 1200, image: '/images/Between the bombs & the stars.jpeg' },
+    { id: 4, name: 'On the edge of the heart', price: 1600, size: '65x50cm', weight: 700, image: '/images/On the edge of the heart.png' },
+    { id: 5, name: 'The sky remembers', price: 2300, size: '100x70cm', weight: 900, image: '/images/The sky remebers.jpeg' },
+
 ];
 
 const ProductPage = () => {
