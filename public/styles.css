@@ -226,7 +226,15 @@ nav ul li a:hover {
 	min-width: 0; /* Prevent flex children from overflowing */
     }
     
-    
+.cart-item-thumbnail {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    flex-shrink: 0;
+}
+
 /* Quantity Controls */
 .cart-item div.quantity-controls {
 	display: flex; /* Align quantity controls horizontally */

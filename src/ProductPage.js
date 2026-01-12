@@ -170,6 +170,12 @@ const ProductPage = () => {
 			    <div>
 				  {cart.map((item) => (
 					<div key={item.id} className="cart-item">
+						 <img 
+            src={item.image} 
+            alt={item.name} 
+            className="cart-item-thumbnail"
+            loading="lazy"
+          />
 					    <span>{item.name}</span>
 					    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
 						  <button
